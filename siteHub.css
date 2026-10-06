@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background: #111;
+    overflow: hidden;
+    font-family: arial, sans-serif;
+}
+
+.area-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 100vh;
+    z-index: 5;
+}
+
+.menu-lateral {
+    position: fixed;
+    left: -300px;
+    top: 0;             
+
+    width: 220px;
+    height: 100vh;       
+    padding: 15px;
+
+    background: #0e054122;
+    border-radius: 0;     
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    transition: left 0.3s ease;
+    z-index: 10;
+}
+
+.menu-lateral.aberto {
+    left: 0;
+}
+
+.menu-lateral button {
+    padding: 10px;
+    background: #2390c3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.menu-lateral button:hover {
+    background: #428a46;
+}
+
+.janela {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+
+    width: 700px;
+    height: 600px;
+    padding: 20px;
+
+    background: #38bdf8;
+    color: #fff;
+    border-radius: 10px;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 20;
+}
+
+.janela.aberta {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.fechar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0px;
+    border: 4px solid #38bdf8;
+    z-index: 9999;
+    pointer-events: none;
+}
