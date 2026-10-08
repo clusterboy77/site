@@ -12,191 +12,130 @@ const formTitle = document.getElementById('form-title');
 const formSubtitle = document.getElementById('form-subtitle');
 const btnLogout = document.getElementById('btn-logout');
 
-// Usuários padrão (sempre existem)
-const DEFAULT_USERS = [
-    { name: 'Administrador', username: 'admin', password: '1234' }
-];
-
-function getUsers() {
-    const stored = localStorage.getItem('siteHubUsers');
-    if (stored) {
-        try {
-            return JSON.parse(stored);
-        } catch (e) {
-            return [...DEFAULT_USERS];
-        }
-    }
-    return [...DEFAULT_USERS];
-}
-
-function saveUsers(users) {
-    localStorage.setItem('siteHubUsers', JSON.stringify(users));
-}
-
-// Garante que o admin sempre exista
-function ensureDefaultUsers() {
-    let users = getUsers();
-    const hasAdmin = users.some(u => u.username === 'admin');
-    if (!hasAdmin) {
-        users.unshift(DEFAULT_USERS[0]);
-        saveUsers(users);
-    }
-}
+// Apenas usuário admin
+const ADMIN_USER = { name: 'Administrador', username: 'admin', password: '1234' };
 
 function isLoggedIn() {
-    return localStorage.getItem('siteHubLoggedIn') === 'true';
+  return sessionStorage.getItem('siteHubLoggedIn') === 'true';
 }
 
-function setLoggedIn(value, username = null) {
-    if (value) {
-        localStorage.setItem('siteHubLoggedIn', 'true');
-        if (username) localStorage.setItem('siteHubCurrentUser', username);
-    } else {
-        localStorage.removeItem('siteHubLoggedIn');
-        localStorage.removeItem('siteHubCurrentUser');
-    }
+function setLoggedIn(value) {
+  if (value) {
+    sessionStorage.setItem('siteHubLoggedIn', 'true');
+  } else {
+    sessionStorage.removeItem('siteHubLoggedIn');
+  }
 }
 
 function showMainSite() {
-    loginScreen.classList.add('hidden');
+  loginScreen.classList.add('hidden');
 }
 
 function showLogin() {
-    loginScreen.classList.remove('hidden');
-    // Limpa formulários
-    loginForm.reset();
-    registerForm.reset();
-    loginError.classList.remove('show');
-    registerError.classList.remove('show');
-    registerError.textContent = '';
-    // Volta para aba de login
-    switchToLogin();
+  loginScreen.classList.remove('hidden');
+  loginForm.reset();
+  registerForm.reset();
+  loginError.classList.remove('show');
+  registerError.classList.remove('show');
+  registerError.textContent = '';
+  switchToLogin();
 }
 
 function switchToLogin() {
-    tabLogin.classList.add('active');
-    tabRegister.classList.remove('active');
-    loginForm.style.display = 'block';
-    registerForm.style.display = 'none';
-    formTitle.textContent = 'Bem-vindo';
-    formSubtitle.textContent = 'Faça login para continuar';
-    loginError.classList.remove('show');
+  tabLogin.classList.add('active');
+  tabRegister.classList.remove('active');
+  loginForm.style.display = 'block';
+  registerForm.style.display = 'none';
+  formTitle.textContent = 'Bem-vindo';
+  formSubtitle.textContent = 'Faça login para continuar';
+  loginError.classList.remove('show');
 }
 
 function switchToRegister() {
-    tabRegister.classList.add('active');
-    tabLogin.classList.remove('active');
-    loginForm.style.display = 'none';
-    registerForm.style.display = 'block';
-    formTitle.textContent = 'Criar Conta';
-    formSubtitle.textContent = 'Preencha os campos abaixo';
-    registerError.classList.remove('show');
-    registerError.textContent = '';
+  tabRegister.classList.add('active');
+  tabLogin.classList.remove('active');
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'block';
+  formTitle.textContent = 'Criar Conta';
+  formSubtitle.textContent = 'Preencha os campos abaixo';
+  registerError.classList.remove('show');
+  registerError.textContent = '';
+}
+
+function highlightError(input) {
+  input.classList.add('error');
+  setTimeout(() => input.classList.remove('error'), 500);
 }
 
 // Inicialização
-ensureDefaultUsers();
-
 if (isLoggedIn()) {
-    showMainSite();
+  showMainSite();
 } else {
-    showLogin();
+  showLogin();
 }
 
-// Abas
 tabLogin.addEventListener('click', switchToLogin);
 tabRegister.addEventListener('click', switchToRegister);
 
-// Login
+// LOGIN - Apenas Admin
 loginForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const user = usernameInput.value.trim();
-    const pass = passwordInput.value;
+  const user = usernameInput.value.trim();
+  const pass = passwordInput.value;
 
-    const users = getUsers();
-    const found = users.find(u => u.username === user && u.password === pass);
+  if (!user || !pass) {
+    loginError.textContent = 'Preencha todos os campos';
+    loginError.classList.add('show');
+    if (!user) highlightError(usernameInput);
+    if (!pass) highlightError(passwordInput);
+    return;
+  }
 
-    if (found) {
-        setLoggedIn(true, user);
-        loginError.classList.remove('show');
-        showMainSite();
-    } else {
-        loginError.classList.add('show');
-        passwordInput.value = '';
-        passwordInput.focus();
-    }
-});
-
-// Registro
-registerForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById('reg-name').value.trim();
-    const username = document.getElementById('reg-username').value.trim();
-    const password = document.getElementById('reg-password').value;
-    const password2 = document.getElementById('reg-password2').value;
-
-    registerError.classList.remove('show');
-    registerError.textContent = '';
-
-    if (password !== password2) {
-        registerError.textContent = 'As senhas não coincidem';
-        registerError.classList.add('show');
-        return;
-    }
-
-    if (password.length < 3) {
-        registerError.textContent = 'A senha deve ter pelo menos 3 caracteres';
-        registerError.classList.add('show');
-        return;
-    }
-
-    if (username.length < 2) {
-        registerError.textContent = 'O usuário deve ter pelo menos 2 caracteres';
-        registerError.classList.add('show');
-        return;
-    }
-
-    let users = getUsers();
-    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-        registerError.textContent = 'Este nome de usuário já está em uso';
-        registerError.classList.add('show');
-        return;
-    }
-
-    users.push({ name, username, password });
-    saveUsers(users);
-
-    // Já faz login automático após criar conta
-    setLoggedIn(true, username);
+  if (user === ADMIN_USER.username && pass === ADMIN_USER.password) {
+    setLoggedIn(true);
+    loginError.classList.remove('show');
     showMainSite();
+  } else {
+    loginError.textContent = 'Usuário ou senha incorretos';
+    loginError.classList.add('show');
+    highlightError(passwordInput);
+    passwordInput.value = '';
+    passwordInput.focus();
+  }
 });
 
-// Botão Sair
+// REGISTRO DESATIVADO - Mostra mensagem
+registerForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  registerError.textContent = 'Registro desativado. Use admin/1234';
+  registerError.classList.add('show');
+});
+
+// LOGOUT
 btnLogout.addEventListener('click', function () {
-    setLoggedIn(false);
-    showLogin();
-    // Fecha o menu se estiver aberto
-    const menu = document.querySelector('.menu-lateral');
-    if (menu) menu.classList.remove('aberto');
+  setLoggedIn(false);
+  showLogin();
+
+  const menu = document.querySelector('.menu-lateral');
+  if (menu) menu.classList.remove('aberto');
 });
 
 // ========== FIM DO SISTEMA DE LOGIN / REGISTRO ==========
 
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
-const sidebar = document.querySelector(".menu-lateral");
+const sidebar = document.querySelector('.menu-lateral');
 
-const opcao1 = document.getElementById("opcao1");
-const opcao2 = document.getElementById("opcao2");
-const opcao3 = document.getElementById("opcao3");
+const opcao1 = document.getElementById('opcao1');
+const opcao2 = document.getElementById('opcao2');
+const opcao3 = document.getElementById('opcao3');
 
-const janela = document.getElementById("janela");
-const fecharJanela = document.getElementById("fecharJanela");
+const janela = document.getElementById('janela');
+const fecharJanela = document.getElementById('fecharJanela');
 
-const areaMenu = document.querySelector(".area-menu");
-const menu = document.querySelector(".menu-lateral");
+const areaMenu = document.querySelector('.area-menu');
+const menu = document.querySelector('.menu-lateral');
 
 let width = 0;
 let height = 0;
@@ -205,10 +144,14 @@ let dpr = window.devicePixelRatio || 1;
 function resizeCanvas() {
   width = window.innerWidth;
   height = window.innerHeight;
+
   canvas.width = width * dpr;
   canvas.height = height * dpr;
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(dpr, dpr);
 }
+
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
@@ -241,7 +184,7 @@ sidebar.addEventListener('mouseleave', () => {
 window.addEventListener('mousemove', (e) => {
   isMouseInsideWindow = true;
 
- if (!isMouseOverSidebar && isWindowActive) {
+  if (!isMouseOverSidebar && isWindowActive) {
     gaze.targetX = e.clientX;
     gaze.targetY = e.clientY;
   }
@@ -263,7 +206,8 @@ class ZParticle {
   constructor(x, y) {
     this.reset(x, y);
   }
- reset(x, y) {
+
+  reset(x, y) {
     this.x = x + (Math.random() - 0.5) * 20;
     this.y = y - 20;
     this.size = Math.random() * 6 + 12;
@@ -328,11 +272,18 @@ class WhiteComputer {
         this.zParticles.splice(i, 1);
       }
     }
-}
+  }
 
-draw(ctx) {
+  draw(ctx) {
     const pcX = width / 2;
     const pcY = height / 2;
+
+    const scale = Math.min(width / 1920, height / 1080, 1);
+
+    ctx.save();
+    ctx.translate(pcX, pcY);
+    ctx.scale(scale, scale);
+    ctx.translate(-pcX, -pcY);
 
     const glowColor = this.eyeOpenness > 0.5 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(245, 158, 11, 0.03)';
     const glowGradient = ctx.createRadialGradient(pcX, pcY, 20, pcX, pcY, 260);
@@ -349,6 +300,7 @@ draw(ctx) {
     this.drawDigitalFace(ctx, pcX, pcY);
 
     this.zParticles.forEach(p => p.draw(ctx));
+    ctx.restore();
   }
 
   drawStand(ctx, baseX, baseY) {
@@ -454,7 +406,7 @@ draw(ctx) {
     ctx.fill();
 
     ctx.restore();
-}
+  }
 
   drawDigitalFace(ctx, x, y) {
     const screenY = y - 8;
@@ -551,7 +503,7 @@ draw(ctx) {
     ctx.restore();
   }
 }
-  
+
 const computer = new WhiteComputer();
 
 function animate() {
@@ -566,42 +518,37 @@ function animate() {
 
 animate();
 
-areaMenu.addEventListener("mouseenter", function () {
-    menu.classList.add("aberto");
+areaMenu.addEventListener('mouseenter', function () {
+  menu.classList.add('aberto');
 });
 
-menu.addEventListener("mouseenter", function () {
-    menu.classList.add("aberto");
+menu.addEventListener('mouseenter', function () {
+  menu.classList.add('aberto');
 });
 
-menu.addEventListener("mouseleave", function () {
-    menu.classList.remove("aberto");
+menu.addEventListener('mouseleave', function () {
+  menu.classList.remove('aberto');
 });
 
-
-opcao1.addEventListener("click", function () {
-    janela.classList.add("aberta");
+opcao1.addEventListener('click', function () {
+  janela.classList.add('aberta');
 });
 
-
-fecharJanela.addEventListener("click", function () {
-    janela.classList.remove("aberta");
+fecharJanela.addEventListener('click', function () {
+  janela.classList.remove('aberta');
 });
 
-
-document.addEventListener("click", function (e) {
-    const cliqueDentro = janela.contains(e.target) || opcao1.contains(e.target);
-    if (!cliqueDentro) {
-        janela.classList.remove("aberta");
-    }
+document.addEventListener('click', function (e) {
+  const cliqueDentro = janela.contains(e.target) || opcao1.contains(e.target);
+  if (!cliqueDentro) {
+    janela.classList.remove('aberta');
+  }
 });
 
-
-opcao2.addEventListener("click", function () {
-  
+opcao2.addEventListener('click', function () {
+  // ação opcao2
 });
 
-
-opcao3.addEventListener("click", function () {
-   
+opcao3.addEventListener('click', function () {
+  // ação opcao3
 });

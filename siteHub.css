@@ -307,7 +307,7 @@ body::after {
     color: #38bdf8;
 }
 
-/* Botão Sair no menu */
+
 .btn-logout {
     margin-top: auto !important;
     background: #dc2626 !important;
@@ -321,4 +321,31 @@ body::after {
 
 .menu-lateral {
     justify-content: flex-start;
+}
+.input-group input.error {
+    border-color: #f87171 !important;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+
+@media (max-width: 480px) {
+    .login-box {
+        max-width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .login-header h1 {
+        font-size: 22px;
+    }
+    
+    .input-group input {
+        padding: 10px 14px;
+        font-size: 16px; 
+    }
 }
