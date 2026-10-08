@@ -7,6 +7,59 @@
     <link rel="stylesheet" href="siteHub.css">
 </head>
 <body>
+    <!-- Tela de Login / Registro -->
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-header">
+                <h1 id="form-title">Bem-vindo</h1>
+                <p id="form-subtitle">Faça login para continuar</p>
+            </div>
+
+            <!-- Abas -->
+            <div class="tabs">
+                <button type="button" class="tab active" id="tab-login">Entrar</button>
+                <button type="button" class="tab" id="tab-register">Criar Conta</button>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Nome de usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required autocomplete="current-password">
+                </div>
+                <p id="login-error" class="login-error">Usuário ou senha incorretos</p>
+                <button type="submit" id="login-btn">Entrar</button>
+            </form>
+
+            <!-- Formulário de Registro -->
+            <form id="register-form" style="display: none;">
+                <div class="input-group">
+                    <label for="reg-name">Nome completo</label>
+                    <input type="text" id="reg-name" placeholder="Seu nome" required>
+                </div>
+                <div class="input-group">
+                    <label for="reg-username">Nome de usuário</label>
+                    <input type="text" id="reg-username" placeholder="Escolha um usuário" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">Senha</label>
+                    <input type="password" id="reg-password" placeholder="Crie uma senha" required autocomplete="new-password">
+                </div>
+                <div class="input-group">
+                    <label for="reg-password2">Confirmar senha</label>
+                    <input type="password" id="reg-password2" placeholder="Digite a senha novamente" required autocomplete="new-password">
+                </div>
+                <p id="register-error" class="login-error"></p>
+                <button type="submit" id="register-btn">Criar Conta</button>
+            </form>
+
+        </div>
+    </div>
+
     <canvas id="bg-canvas"></canvas>
 
     <div class="area-menu"></div>
@@ -15,6 +68,7 @@
         <button id="opcao1">Opção 1</button>
         <button id="opcao2">Opção 2</button>
         <button id="opcao3">Opção 3</button>
+        <button id="btn-logout" class="btn-logout">Sair (Login)</button>
     </div>
 
     <div id="janela" class="janela">

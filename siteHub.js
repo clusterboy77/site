@@ -1,3 +1,189 @@
+// ========== SISTEMA DE LOGIN / REGISTRO ==========
+const loginScreen = document.getElementById('login-screen');
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+const loginError = document.getElementById('login-error');
+const registerError = document.getElementById('register-error');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const tabLogin = document.getElementById('tab-login');
+const tabRegister = document.getElementById('tab-register');
+const formTitle = document.getElementById('form-title');
+const formSubtitle = document.getElementById('form-subtitle');
+const btnLogout = document.getElementById('btn-logout');
+
+// Usuários padrão (sempre existem)
+const DEFAULT_USERS = [
+    { name: 'Administrador', username: 'admin', password: '1234' }
+];
+
+function getUsers() {
+    const stored = localStorage.getItem('siteHubUsers');
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch (e) {
+            return [...DEFAULT_USERS];
+        }
+    }
+    return [...DEFAULT_USERS];
+}
+
+function saveUsers(users) {
+    localStorage.setItem('siteHubUsers', JSON.stringify(users));
+}
+
+// Garante que o admin sempre exista
+function ensureDefaultUsers() {
+    let users = getUsers();
+    const hasAdmin = users.some(u => u.username === 'admin');
+    if (!hasAdmin) {
+        users.unshift(DEFAULT_USERS[0]);
+        saveUsers(users);
+    }
+}
+
+function isLoggedIn() {
+    return localStorage.getItem('siteHubLoggedIn') === 'true';
+}
+
+function setLoggedIn(value, username = null) {
+    if (value) {
+        localStorage.setItem('siteHubLoggedIn', 'true');
+        if (username) localStorage.setItem('siteHubCurrentUser', username);
+    } else {
+        localStorage.removeItem('siteHubLoggedIn');
+        localStorage.removeItem('siteHubCurrentUser');
+    }
+}
+
+function showMainSite() {
+    loginScreen.classList.add('hidden');
+}
+
+function showLogin() {
+    loginScreen.classList.remove('hidden');
+    // Limpa formulários
+    loginForm.reset();
+    registerForm.reset();
+    loginError.classList.remove('show');
+    registerError.classList.remove('show');
+    registerError.textContent = '';
+    // Volta para aba de login
+    switchToLogin();
+}
+
+function switchToLogin() {
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+    formTitle.textContent = 'Bem-vindo';
+    formSubtitle.textContent = 'Faça login para continuar';
+    loginError.classList.remove('show');
+}
+
+function switchToRegister() {
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    formTitle.textContent = 'Criar Conta';
+    formSubtitle.textContent = 'Preencha os campos abaixo';
+    registerError.classList.remove('show');
+    registerError.textContent = '';
+}
+
+// Inicialização
+ensureDefaultUsers();
+
+if (isLoggedIn()) {
+    showMainSite();
+} else {
+    showLogin();
+}
+
+// Abas
+tabLogin.addEventListener('click', switchToLogin);
+tabRegister.addEventListener('click', switchToRegister);
+
+// Login
+loginForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const user = usernameInput.value.trim();
+    const pass = passwordInput.value;
+
+    const users = getUsers();
+    const found = users.find(u => u.username === user && u.password === pass);
+
+    if (found) {
+        setLoggedIn(true, user);
+        loginError.classList.remove('show');
+        showMainSite();
+    } else {
+        loginError.classList.add('show');
+        passwordInput.value = '';
+        passwordInput.focus();
+    }
+});
+
+// Registro
+registerForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('reg-name').value.trim();
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const password2 = document.getElementById('reg-password2').value;
+
+    registerError.classList.remove('show');
+    registerError.textContent = '';
+
+    if (password !== password2) {
+        registerError.textContent = 'As senhas não coincidem';
+        registerError.classList.add('show');
+        return;
+    }
+
+    if (password.length < 3) {
+        registerError.textContent = 'A senha deve ter pelo menos 3 caracteres';
+        registerError.classList.add('show');
+        return;
+    }
+
+    if (username.length < 2) {
+        registerError.textContent = 'O usuário deve ter pelo menos 2 caracteres';
+        registerError.classList.add('show');
+        return;
+    }
+
+    let users = getUsers();
+    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+        registerError.textContent = 'Este nome de usuário já está em uso';
+        registerError.classList.add('show');
+        return;
+    }
+
+    users.push({ name, username, password });
+    saveUsers(users);
+
+    // Já faz login automático após criar conta
+    setLoggedIn(true, username);
+    showMainSite();
+});
+
+// Botão Sair
+btnLogout.addEventListener('click', function () {
+    setLoggedIn(false);
+    showLogin();
+    // Fecha o menu se estiver aberto
+    const menu = document.querySelector('.menu-lateral');
+    if (menu) menu.classList.remove('aberto');
+});
+
+// ========== FIM DO SISTEMA DE LOGIN / REGISTRO ==========
+
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 const sidebar = document.querySelector(".menu-lateral");

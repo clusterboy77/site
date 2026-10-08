@@ -123,3 +123,202 @@ body::after {
     z-index: 9999;
     pointer-events: none;
 }
+/* ========== TELA DE LOGIN ========== */
+#login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #0f172a 0%, #020617 100%);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#login-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 380px;
+    padding: 40px 32px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(56, 189, 248, 0.1);
+    animation: loginAppear 0.6s ease;
+}
+
+@keyframes loginAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.5));
+}
+
+.login-header h1 {
+    color: #f1f5f9;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.login-header p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input::placeholder {
+    color: #64748b;
+}
+
+.input-group input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.login-error {
+    display: none;
+    color: #f87171;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 14px;
+    padding: 8px;
+    background: rgba(248, 113, 113, 0.1);
+    border-radius: 8px;
+}
+
+.login-error.show {
+    display: block;
+}
+
+#login-btn,
+#register-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    margin-top: 6px;
+}
+
+#login-btn:hover,
+#register-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+    filter: brightness(1.08);
+}
+
+#login-btn:active,
+#register-btn:active {
+    transform: translateY(0);
+}
+
+.login-hint {
+    text-align: center;
+    margin-top: 20px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.login-hint strong {
+    color: #38bdf8;
+}
+
+/* ========== ABAS DE LOGIN / REGISTRO ========== */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    background: rgba(2, 6, 23, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 10px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #cbd5e1;
+}
+
+.tab.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+/* Botão Sair no menu */
+.btn-logout {
+    margin-top: auto !important;
+    background: #dc2626 !important;
+    border: 1px solid rgba(248, 113, 113, 0.4) !important;
+}
+
+.btn-logout:hover {
+    background: #b91c1c !important;
+    filter: brightness(1.1);
+}
+
+.menu-lateral {
+    justify-content: flex-start;
+}
