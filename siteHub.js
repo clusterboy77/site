@@ -253,7 +253,8 @@ class WhiteComputer {
 
     if (shouldSleep) {
       if (now - this.lastZTime > 650) {
-        this.zParticles.push(new ZParticle(width / 2 + 130, height / 2 - 100));
+        const pos = this.getPosition();
+        this.zParticles.push(new ZParticle(pos.x + 130, pos.y - 100));
         this.lastZTime = now;
       }
     } else if (isMouseOverSidebar) {
@@ -275,23 +276,25 @@ class WhiteComputer {
   }
 
   draw(ctx) {
-    const pcX = width / 2;
-    const pcY = height / 2;
-
-    const scale = Math.min(width / 1920, height / 1080, 1);
+    const { x: pcX, y: pcY, scale } = this.getPosition();
 
     ctx.save();
     ctx.translate(pcX, pcY);
     ctx.scale(scale, scale);
     ctx.translate(-pcX, -pcY);
 
-    const glowColor = this.eyeOpenness > 0.5 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(245, 158, 11, 0.03)';
-    const glowGradient = ctx.createRadialGradient(pcX, pcY, 20, pcX, pcY, 260);
-    glowGradient.addColorStop(0, glowColor);
-    glowGradient.addColorStop(1, 'rgba(9, 13, 22, 0)');
-    ctx.fillStyle = glowGradient;
+    const pulse = (Math.sin(Date.now() / 600) + 1) / 2;
+    const awake = this.eyeOpenness > 0.5;
+    const rgb = awake ? '56, 189, 248' : '245, 158, 11';
+    const alpha = awake ? 0.18 + pulse * 0.17 : 0.06 + pulse * 0.06;
+    const radius = 230 + pulse * 40;
+
+    const glowgradient = ctx.createRadialGradient(pcX, pcY, 40, pcX, pcY, radius);
+    glowgradient.addColorStop(0, `rgba(${rgb}, ${alpha})`);
+    glowgradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = glowgradient;
     ctx.beginPath();
-    ctx.arc(pcX, pcY, 260, 0, Math.PI * 2);
+    ctx.arc(pcX, pcY, radius, 0, Math.PI * 2);
     ctx.fill();
 
     this.drawStand(ctx, pcX, pcY);
@@ -328,6 +331,18 @@ class WhiteComputer {
     ctx.restore();
   }
 
+  getPosition(){
+    const scale = Math.min(width / 1920, height / 1080, 1);
+    const margin = 40;
+
+    return {
+      scale,
+      x: width - margin - (this.monitorWidth / 2) * scale,
+      y: height - margin - 165 * scale
+    }; 
+
+  }
+
   drawWhiteCase(ctx, x, y) {
     ctx.save();
 
@@ -350,7 +365,7 @@ class WhiteComputer {
     ctx.lineWidth = 4;
 
     ctx.beginPath();
-    ctx.roundRect(rx, ry, w, h, 36);
+    ctx.roundRect(rx, ry, w, h, 16);
     ctx.fill();
     ctx.stroke();
 
@@ -388,7 +403,7 @@ class WhiteComputer {
     ctx.lineWidth = 3;
 
     ctx.beginPath();
-    ctx.roundRect(sx, sy, sw, sh, 20);
+    ctx.roundRect(sx, sy, sw, sh, 10);
     ctx.fill();
     ctx.stroke();
 
