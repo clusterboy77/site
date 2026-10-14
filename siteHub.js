@@ -1,4 +1,4 @@
-// ========== SISTEMA DE LOGIN / REGISTRO ==========
+// registro e login
 const loginScreen = document.getElementById('login-screen');
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
@@ -12,7 +12,7 @@ const formTitle = document.getElementById('form-title');
 const formSubtitle = document.getElementById('form-subtitle');
 const btnLogout = document.getElementById('btn-logout');
 
-// Apenas usuário admin
+// unico usuario permitido (admin)
 const ADMIN_USER = { name: 'Administrador', username: 'admin', password: '1234' };
 
 function isLoggedIn() {
@@ -287,7 +287,7 @@ class WhiteComputer {
     const awake = this.eyeOpenness > 0.5;
     const rgb = awake ? '56, 189, 248' : '245, 158, 11';
     const alpha = awake ? 0.18 + pulse * 0.17 : 0.06 + pulse * 0.06;
-    const radius = 230 + pulse * 40;
+    const radius = 240 + pulse * 40;
 
     const glowgradient = ctx.createRadialGradient(pcX, pcY, 40, pcX, pcY, radius);
     glowgradient.addColorStop(0, `rgba(${rgb}, ${alpha})`);
@@ -532,17 +532,47 @@ function animate() {
 }
 
 animate();
+const MENU_LARGURA = 220 + 30;
+const MENU_ESCONDIDO = -300;
 
-areaMenu.addEventListener('mouseenter', function () {
-  menu.classList.add('aberto');
+let arrastando = false;
+let inicioX = 0;
+let leftInicial = MENU_ESCONDIDO;
+let leftAtual = MENU_ESCONDIDO;
+
+function iniciarArrasto(e) {
+  arrastando = true;
+  inicioX = e.clientX 
+  leftInicial = menu.classList.contains('aberto') ? 0 : MENU_ESCONDIDO;
+  leftAtual = leftInicial;
+  menu.style.transition = 'none';
+}
+
+areaMenu.addEventListener('pointerdown', iniciarArrasto);
+menu.addEventListener('pointerdown', function (e) {
+  if (e.target.tagName === 'BUTTON') return;
+  iniciarArrasto(e);
 });
 
-menu.addEventListener('mouseenter', function () {
-  menu.classList.add('aberto');
+window.addEventListener('pointermove', function (e) {
+  if (!arrastando) return;
+  const deltaX = e.clientX - inicioX;
+  leftAtual = Math.min(Math.max(leftInicial + deltaX, MENU_ESCONDIDO), 0);
+  menu.style.left = leftAtual + 'px';
 });
 
-menu.addEventListener('mouseleave', function () {
-  menu.classList.remove('aberto');
+window.addEventListener('pointerup', function () {
+  if (!arrastando) return;
+  arrastando = false;
+  menu.style.transition = '';
+  menu.style.left = '';
+
+ const metade = MENU_ESCONDIDO / 2;
+  if (leftAtual > metade) {
+    menu.classList.add('aberto');
+  } else {
+    menu.classList.remove('aberto');
+  }
 });
 
 opcao1.addEventListener('click', function () {
@@ -561,9 +591,9 @@ document.addEventListener('click', function (e) {
 });
 
 opcao2.addEventListener('click', function () {
-  // ação opcao2
+  
 });
 
 opcao3.addEventListener('click', function () {
-  // ação opcao3
+ 
 });
