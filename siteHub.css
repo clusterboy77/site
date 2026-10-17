@@ -34,17 +34,13 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-    width: 35px;
+    width: 10px;
     height: 100vh;
     height: 100dvh;
     z-index: 5;
-    cursor: grab;
-    touch-action: none;
 }
 
 .menu-lateral {
-    touch-action: none;
-    user-select: none;
     position: fixed;
     left: -300px;
     top: 0;             
@@ -356,4 +352,58 @@ body::after {
         padding: 10px 14px;
         font-size: 16px; 
     }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .area-menu {
+        width: 35px;
+        cursor: grab;
+        touch-action: none;
+    }
+
+    .menu-lateral {
+        touch-action: none;
+        user-select: none;
+    }
+}
+
+#splash {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #090d16;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#splash.sumindo {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#splash-logo {
+    width: min(320px, 65vw);
+    height: auto;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(12px);
+    animation: logoAparece 1.2s ease forwards,
+               brilhoLogo 2.4s ease-in-out 1.2 infinite alternate;
+}
+
+@keyframes logoAparece {
+    to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes brilhoLogo {
+    0%, 100% { box-shadow: 0 0 20px rgba(76, 140, 60, 0.35), 0 0 50px rgba(56, 189, 248, 0.15); }
+    50%      { box-shadow: 0 0 35px rgba(76, 140, 60, 0.65), 0 0 80px rgba(56, 189, 248, 0.35); }
 }
