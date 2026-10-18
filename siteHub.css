@@ -87,7 +87,9 @@ body {
     width: min(700px, 90vw);
     height: min(600px, 80vh);
     height: min(600px, 80dvh);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     padding: 20px;
 
     background: #38bdf8;
@@ -98,7 +100,8 @@ body {
     visibility: hidden;
     pointer-events: none;
 
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease,
+    width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
     z-index: 20;
 }
 
@@ -107,17 +110,6 @@ body {
     visibility: visible;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
-}
-
-.fechar {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
 }
 
 body::after {
@@ -282,7 +274,7 @@ body::after {
     color: #38bdf8;
 }
 
-/* ========== ABAS DE LOGIN / REGISTRO ========== */
+
 .tabs {
     display: flex;
     gap: 8px;
@@ -454,4 +446,73 @@ body::after {
         max-width: none;
         opacity: 1;
     }
+}
+
+.janela-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+}
+
+.janela-topo h2 {
+    margin: 0;
+}
+
+.janela-botoes {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-janela {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-janela:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.btn-janela svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}.icone-reduzir {
+    display: none !important;
+}
+
+.janela.expandida .icone-expandir {
+    display: none !important;
+}
+
+.janela.expandida .icone-reduzir {
+    display: block !important;
+}
+
+#janela-conteudo {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.janela.expandida {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
 }

@@ -1,4 +1,4 @@
-// registro e login
+
 const loginScreen = document.getElementById('login-screen');
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
@@ -12,7 +12,7 @@ const formTitle = document.getElementById('form-title');
 const formSubtitle = document.getElementById('form-subtitle');
 const btnLogout = document.getElementById('btn-logout');
 
-// unico usuario permitido (admin)
+
 const ADMIN_USER = { name: 'Administrador', username: 'admin', password: '1234' };
 
 function isLoggedIn() {
@@ -67,7 +67,7 @@ function highlightError(input) {
   setTimeout(() => input.classList.remove('error'), 500);
 }
 
-// Inicialização
+
 if (isLoggedIn()) {
   showMainSite();
 } else {
@@ -77,7 +77,7 @@ if (isLoggedIn()) {
 tabLogin.addEventListener('click', switchToLogin);
 tabRegister.addEventListener('click', switchToRegister);
 
-// LOGIN - Apenas Admin
+
 loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -105,14 +105,14 @@ loginForm.addEventListener('submit', function (e) {
   }
 });
 
-// REGISTRO DESATIVADO - Mostra mensagem
+
 registerForm.addEventListener('submit', function (e) {
   e.preventDefault();
   registerError.textContent = 'Registro desativado. Use admin/1234';
   registerError.classList.add('show');
 });
 
-// LOGOUT
+
 btnLogout.addEventListener('click', function () {
   setLoggedIn(false);
   showLogin();
@@ -121,7 +121,7 @@ btnLogout.addEventListener('click', function () {
   if (menu) menu.classList.remove('aberto');
 });
 
-// ========== FIM DO SISTEMA DE LOGIN / REGISTRO ==========
+
 
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
@@ -625,18 +625,55 @@ function soltarArrasto() {
   el.addEventListener('pointercancel', soltarArrasto);
 });
 
-fecharJanela.addEventListener('click', function () {
+const expandirJanela = document.getElementById('expandirJanela');
+
+function fecharJanelaAgora() {
   janela.classList.remove('aberta');
+
+ setTimeout(function () {
+    if (!janela.classList.contains('aberta')) {
+      janela.classList.remove('expandida');
+      expandirJanela.title = 'Expandir';
+      expandirJanela.setAttribute('aria-label', 'Expandir');
+    }
+  }, 300);
+}
+fecharJanela.addEventListener('click', fecharJanelaAgora);
+
+expandirJanela.addEventListener('click', function () {
+  const expandida = janela.classList.toggle('expandida');
+  const texto = expandida ? 'Reduzir' : 'Expandir';
+  expandirJanela.title = texto;
+  expandirJanela.setAttribute('aria-label', texto);
 });
 
 document.addEventListener('click', function (e) {
-   const cliqueDentro = janela.contains(e.target) || opcoes.some(function (b) { return b.contains(e.target); });
-  if (!cliqueDentro) {
-    janela.classList.remove('aberta');
+  const cliqueDentro = janela.contains(e.target) || menu.contains(e.target);
+  if (!cliqueDentro && janela.classList.contains('aberta')) {
+    fecharJanelaAgora();
   }
 });
 
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && janela.classList.contains('aberta')) {
+    fecharJanelaAgora();
+  }
+});
 
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && janela.classList.contains('aberta')) {
+    fecharJanelaAgora();
+  }
+});
+
+fecharJanela.addEventListener('click', fecharJanelaAgora);
+
+expandirJanela.addEventListener('click', function () {
+  const expandida = janela.classList.toggle('expandida');
+  const texto = expandida ? 'Reduzir' : 'Expandir';
+  expandirJanela.title = texto;
+  expandirJanela.setAttribute('aria-label', texto);
+});
 const splash = document.getElementById('splash');
 
 window.addEventListener('load', function () {

@@ -69,15 +69,25 @@
     <div class="area-menu"></div>
 
     <div class="menu-lateral">
-                <button id="opcao1" class="btn-opcao" aria-label="Opção 1"><span class="inicial">O</span><span class="resto">pção 1</span></button>
+        <button id="opcao1" class="btn-opcao" aria-label="Opção 1"><span class="inicial">O</span><span class="resto">pção 1</span></button>
         <button id="opcao2" class="btn-opcao" aria-label="Opção 2"><span class="inicial">O</span><span class="resto">pção 2</span></button>
         <button id="opcao3" class="btn-opcao" aria-label="Opção 3"><span class="inicial">O</span><span class="resto">pção 3</span></button>
         <button id="btn-logout" class="btn-logout">Sair para tela inicial</button>
     </div>
 
     <div id="janela" class="janela">
-                <button id="fecharJanela" class="fechar">X</button>
-        <h2 id="testando botão variavel"></h2>
+        <div class="janela-topo">
+            <h2 id="janela-titulo"></h2>
+            <div class="janela-botoes">
+                <button id="expandirJanela" class="btn-janela" aria-label="Expandir" title="Expandir">
+                    <svg class="icone-expandir" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                    <svg class="icone-reduzir" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+                </button>
+                <button id="fecharJanela" class="btn-janela" aria-label="Fechar" title="Fechar">
+                    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+            </div>
+        </div>
         <div id="janela-conteudo"></div>
     </div>
 
