@@ -37,7 +37,7 @@ body {
     width: 10px;
     height: 100vh;
     height: 100dvh;
-    z-index: 5;
+    z-index: 9100;
 }
 
 .menu-lateral {
@@ -58,7 +58,7 @@ body {
     gap: 10px;
 
     transition: left 0.3s ease;
-    z-index: 10;
+    z-index: 9200;
 }
 
 .menu-lateral.aberto {
@@ -84,8 +84,10 @@ body {
     left: 50%;
     transform: translate(-50%, -50%) scale(0.9);
 
-    width: 700px;
-    height: 600px;
+    width: min(700px, 90vw);
+    height: min(600px, 80vh);
+    height: min(600px, 80dvh);
+    overflow-y: auto;
     padding: 20px;
 
     background: #38bdf8;
@@ -123,7 +125,7 @@ body::after {
     position: fixed;
     inset: 0;
     border: 4px solid #38bdf8;
-    z-index: 9999;
+    z-index: 9000;
     pointer-events: none;
     box-shadow: inset 0 0 9px rgba(56, 189, 248, 0.5);
 }
@@ -392,7 +394,7 @@ body::after {
     transform: scale(0.8);
     filter: blur(12px);
     animation: logoAparece 1.2s ease forwards,
-               brilhoLogo 2.4s ease-in-out 1.2 infinite alternate;
+               brilhoLogo 2.4s ease-in-out 1.2s infinite;
 }
 
 @keyframes logoAparece {
@@ -406,4 +408,50 @@ body::after {
 @keyframes brilhoLogo {
     0%, 100% { box-shadow: 0 0 20px rgba(76, 140, 60, 0.35), 0 0 50px rgba(56, 189, 248, 0.15); }
     50%      { box-shadow: 0 0 35px rgba(76, 140, 60, 0.65), 0 0 80px rgba(56, 189, 248, 0.35); }
+}
+
+.janela h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+}
+
+.btn-opcao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.btn-opcao .resto {
+    display: inline-block;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.3s ease, opacity 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-opcao {
+        width: 42px;
+        transition: width 0.3s ease, background 0.2s ease;
+    }
+
+    .btn-opcao:hover,
+    .btn-opcao:focus-visible {
+        width: 100%;
+    }
+
+    .btn-opcao:hover .resto,
+    .btn-opcao:focus-visible .resto {
+        max-width: 150px;
+        opacity: 1;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .btn-opcao .resto {
+        max-width: none;
+        opacity: 1;
+    }
 }

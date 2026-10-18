@@ -534,8 +534,27 @@ function animate() {
 animate();
 
 const modoPc = window.matchMedia('(hover: hover) and (pointer: fine)');
-opcao1.addEventListener('click', function () {
+const janelaTitulo = document.getElementById('janela-titulo');
+const janelaConteudo = document.getElementById('janela-conteudo');
+const opcoes = [opcao1, opcao2, opcao3];
+
+const conteudos = {
+  opcao1: { titulo: 'Opção 1', html: '<p>quem leu é baitola</p>' },
+  opcao2: { titulo: 'Opção 2', html: '<p>Conteúdo da Opção 2 aqui.</p>' },
+  opcao3: { titulo: 'Opção 3', html: '<p>Conteúdo da Opção 3 aqui.</p>' }
+};
+
+function abrirJanela(chave) {
+  const c = conteudos[chave];
+  janelaTitulo.textContent = c.titulo;
+  janelaConteudo.innerHTML = c.html;
   janela.classList.add('aberta');
+}
+
+opcoes.forEach(function (botao) {
+  botao.addEventListener('click', function () {
+    abrirJanela(botao.id);
+  });
 });
 
 areaMenu.addEventListener('mouseenter', function () {
@@ -543,12 +562,12 @@ areaMenu.addEventListener('mouseenter', function () {
   menu.classList.add('aberto');
 });
 
-areaMenu.addEventListener('mouseenter', function () {
+menu.addEventListener('mouseenter', function () {
   if (!modoPc.matches) return;
   menu.classList.add('aberto');
 });
 
-areaMenu.addEventListener('mouseleave', function () {
+menu.addEventListener('mouseleave', function () {
   if (!modoPc.matches) return;
   menu.classList.remove('aberto');
 });
@@ -563,10 +582,10 @@ let leftAtual = MENU_ESCONDIDO;
 
 function iniciarArraste(e) {
   if(modoPc.matches && e.pointerType !== 'touch') return;
-  if (e.target.tagName === 'BUTTON') return;
+  if (e.target.closest === 'BUTTON') return;
 
   arrastando = true;
-  moveu = False;
+  moveu = false;
   inicioX = e.clientX;
   leftInicial = menu.classList.contains('aberto') ? 0 : MENU_ESCONDIDO;
   leftAtual = leftInicial;
@@ -590,7 +609,7 @@ function soltarArrasto() {
   menu.style.transition = '';
   menu.style.left = '';
 
-  if (moveu) {
+  if (!moveu) {
     menu.classList.toggle('aberto');
   } else if (leftAtual > MENU_ESCONDIDO / 2) {
     menu.classList.add('aberto');
@@ -611,19 +630,12 @@ fecharJanela.addEventListener('click', function () {
 });
 
 document.addEventListener('click', function (e) {
-  const cliqueDentro = janela.contains(e.target) || opcao1.contains(e.target);
+   const cliqueDentro = janela.contains(e.target) || opcoes.some(function (b) { return b.contains(e.target); });
   if (!cliqueDentro) {
     janela.classList.remove('aberta');
   }
 });
 
-opcao2.addEventListener('click', function () {
-  
-});
-
-opcao3.addEventListener('click', function () {
- 
-});
 
 const splash = document.getElementById('splash');
 
