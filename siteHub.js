@@ -539,9 +539,9 @@ const janelaConteudo = document.getElementById('janela-conteudo');
 const opcoes = [opcao1, opcao2, opcao3];
 
 const conteudos = {
-  opcao1: { titulo: 'Opção 1', html: '<p>quem leu é baitola</p>' },
-  opcao2: { titulo: 'Opção 2', html: '<p>Conteúdo da Opção 2 aqui.</p>' },
-  opcao3: { titulo: 'Opção 3', html: '<p>Conteúdo da Opção 3 aqui.</p>' }
+  opcao1: { titulo: 'Aparalhos', html: '<p>quem leu é baitola</p>' },
+  opcao2: { titulo: 'Empréstimo', html: '<p>Conteúdo da Opção 2 aqui.</p>' },
+  opcao3: { titulo: 'Relatório', html: '<p>Conteúdo da Opção 3 aqui.</p>' }
 };
 
 function abrirJanela(chave) {
