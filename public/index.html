@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCM — Controle de Aparelhos</title>
+    <link rel="stylesheet" href="siteHub.css">
+</head>
+<body>
+
+    <div id="splash">
+        <img id="splash-logo" src="logo.png" alt="Colegio Logo">
+    </div>
+   
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-header">
+                <h1 id="form-title">Bem-vindo</h1>
+                <p id="form-subtitle">Faça login para continuar</p>
+            </div>
+
+            
+            <div class="tabs">
+                <button type="button" class="tab active" id="tab-login">Entrar</button>
+                <button type="button" class="tab" id="tab-register">Criar Conta</button>
+            </div>
+
+            
+            <form id="login-form" autocomplete="off">
+                <div class="input-group">
+                    <label for="username">Nome de usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required autocomplete="off" autocapitalize="none" spellcheck="false">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required autocomplete="off" maxlength="30">
+                </div>
+                <p id="login-error" class="login-error">Usuário ou senha incorretos</p>
+                <button type="submit" id="login-btn">Entrar</button>
+            </form>
+
+            
+            <form id="register-form" style="display: none;" autocomplete="off">
+                <div class="input-group">
+                    <label for="reg-username">Nome de usuário</label>
+                    <input type="text" id="reg-username" placeholder="Escolha um usuário" required autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="99">
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">Senha</label>
+                    <input type="password" id="reg-password" placeholder="Crie uma senha (4 a 30 caracteres)" required autocomplete="off" maxlength="30">
+                </div>
+                <div class="input-group">
+                    <label for="reg-password2">Confirmar senha</label>
+                    <input type="password" id="reg-password2" placeholder="Digite a senha novamente" required autocomplete="off" maxlength="30">
+                </div>
+                <p id="register-error" class="login-error"></p>
+                <button type="submit" id="register-btn">Criar Conta</button>
+            </form>
+
+        </div>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="area-menu"></div>
+
+    <div class="menu-lateral">
+        <div class="menu-logo"><img class="logo-ccm" src="logo.png" alt="CCM"></div>
+        <button id="opcao1" class="btn-opcao" aria-label="Aparelhos"><span class="inicial">A</span><span class="resto">parelhos</span></button>
+        <button id="opcao2" class="btn-opcao" aria-label="Empréstimos"><span class="inicial">E</span><span class="resto">mpréstimos</span></button>
+        <button id="opcao3" class="btn-opcao" aria-label="Relatórios"><span class="inicial">R</span><span class="resto">elatórios</span></button>
+        <button id="opcao4" class="btn-opcao" aria-label="Usuários" style="display:none"><span class="inicial">U</span><span class="resto">suários</span></button>
+        <button id="btn-logout" class="btn-logout">Sair para tela inicial</button>
+    </div>
+
+    <!-- Nova aba lateral (direita) com o ícone do CCM -->
+    <button id="aba-ccm" class="aba-ccm" aria-label="Abrir painel do CCM" title="CCM">
+        <img class="logo-ccm" src="logo.png" alt="CCM">
+    </button>
+    <aside id="painel-ccm" class="painel-ccm" aria-label="Painel do CCM">
+        <button id="fechar-painel" class="btn-janela" aria-label="Fechar painel" title="Fechar">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <img class="logo-ccm painel-logo" src="logo.png" alt="Logo do CCM">
+        <h3>CCM</h3>
+        <p class="painel-sub">Controle de aparelhos</p>
+        <div class="painel-usuario">
+            <span id="painel-nome">—</span>
+            <span id="painel-cargo" class="selo ok">—</span>
+        </div>
+    </aside>
+
+    <div id="janela" class="janela">
+        <div class="janela-topo">
+            <h2 id="janela-titulo"></h2>
+            <div class="janela-botoes">
+                <button id="expandirJanela" class="btn-janela" aria-label="Expandir" title="Expandir">
+                    <svg class="icone-expandir" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                    <svg class="icone-reduzir" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+                </button>
+                <button id="fecharJanela" class="btn-janela" aria-label="Fechar" title="Fechar">
+                    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+            </div>
+        </div>
+        <div id="janela-conteudo"></div>
+    </div>
+
+    <script src="siteHub.js"></script>
+</body>
+</html>
