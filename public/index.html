@@ -1,18 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="claro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCM - Flecha Automações</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        (function () {
+            try {
+                var temaSalvo = localStorage.getItem('flecha_tema');
+                document.documentElement.setAttribute('data-theme', temaSalvo === 'escuro' ? 'escuro' : 'claro');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'claro');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="siteHub.css">
 </head>
 <body>
 
     <div id="splash">
-        <img id="splash-logo" src="logo.png" alt="Colegio Logo">
+        <img id="splash-logo" src="logo.png" alt="Colégio Logo">
     </div>
-   
+
+    <div id="theme-switcher" class="theme-switcher">
+        <button id="btn-tema-config" class="btn-tema-config" type="button"
+                aria-label="Configurações de tema" aria-haspopup="true" aria-expanded="false"
+                title="Configurações de tema">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+        <div id="menu-tema" class="menu-tema" role="menu" aria-label="Selecionar tema">
+            <div class="menu-tema-titulo">Aparência</div>
+            <button type="button" class="opcao-tema" data-tema-valor="claro" role="menuitemradio" aria-checked="true">
+                <span class="tema-icone" aria-hidden="true">☀️</span>
+                <span>Tema Claro</span>
+                <span class="tema-check" aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="opcao-tema" data-tema-valor="escuro" role="menuitemradio" aria-checked="false">
+                <span class="tema-icone" aria-hidden="true">🌙</span>
+                <span>Tema Escuro</span>
+                <span class="tema-check" aria-hidden="true">✓</span>
+            </button>
+        </div>
+    </div>
+
     <div id="login-screen">
         <div class="login-box">
             <div class="login-header">
@@ -20,13 +54,11 @@
                 <p id="form-subtitle">Faça login para continuar</p>
             </div>
 
-            
             <div class="tabs">
                 <button type="button" class="tab active" id="tab-login">Entrar</button>
                 <button type="button" class="tab" id="tab-register">Criar Conta</button>
             </div>
 
-            
             <form id="login-form" autocomplete="off">
                 <div class="input-group">
                     <label for="username">Nome de usuário</label>
@@ -40,7 +72,6 @@
                 <button type="submit" id="login-btn">Entrar</button>
             </form>
 
-            
             <form id="register-form" style="display: none;" autocomplete="off">
                 <div class="input-group">
                     <label for="reg-username">Nome de usuário</label>
@@ -63,42 +94,77 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <div class="area-menu"></div>
+    <div id="arco-badge" class="arco-badge" aria-hidden="true">Arco • assistente do Flecha</div>
 
-    <div class="menu-lateral">
-        <div class="menu-logo"><img class="logo-ccm" src="logo.png" alt="CCM"></div>
-        <button id="opcao1" class="btn-opcao" aria-label="Aparelhos"><span class="inicial">A</span><span class="resto">parelhos</span></button>
-        <button id="opcao2" class="btn-opcao" aria-label="Empréstimos"><span class="inicial">E</span><span class="resto">mpréstimos</span></button>
-        <button id="opcao3" class="btn-opcao" aria-label="Relatórios"><span class="inicial">R</span><span class="resto">elatórios</span></button>
-        <button id="opcao4" class="btn-opcao" aria-label="Usuários" style="display:none"><span class="inicial">U</span><span class="resto">suários</span></button>
-        <button id="btn-logout" class="btn-logout">Sair para tela inicial</button>
+    <main id="dashboard" class="dashboard" aria-live="polite"></main>
+
+    <!-- Modal de Expansão de Gráficos SaaS -->
+    <div id="modal-grafico" class="modal-grafico-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-grafico-titulo" hidden>
+        <div class="modal-grafico-card">
+            <div class="modal-grafico-topo">
+                <div class="modal-grafico-info">
+                    <span class="modal-grafico-tag" id="modal-grafico-categoria">ANÁLISE</span>
+                    <h2 id="modal-grafico-titulo">Gráfico</h2>
+                    <p id="modal-grafico-desc"></p>
+                </div>
+                <div class="modal-grafico-controles">
+                    <button type="button" class="mini" id="modal-grafico-anterior" title="Gráfico anterior">← Anterior</button>
+                    <select id="modal-grafico-seletor" aria-label="Selecionar gráfico"></select>
+                    <button type="button" class="mini" id="modal-grafico-proximo" title="Próximo gráfico">Próximo →</button>
+                    <button type="button" class="btn-janela" id="modal-grafico-fechar" aria-label="Fechar visualização" title="Fechar">
+                        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-grafico-corpo">
+                <div id="modal-grafico-canvas" class="modal-grafico-canvas"></div>
+                <div id="modal-grafico-tabela" class="modal-grafico-tabela"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Nova aba lateral (direita) com o ícone do CCM -->
-    <button id="aba-ccm" class="aba-ccm" aria-label="Abrir painel do CCM" title="CCM">
-        <img class="logo-ccm" src="logo.png" alt="CCM">
+    <button id="toggle-menu" class="toggle-menu" type="button"
+            aria-label="Abrir menu" aria-controls="menu-lateral" aria-expanded="false"
+            title="Abrir menu">
+        <span></span><span></span><span></span>
     </button>
-    <aside id="painel-ccm" class="painel-ccm" aria-label="Painel do CCM">
-        <button id="fechar-painel" class="btn-janela" aria-label="Fechar painel" title="Fechar">
-            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-        </button>
-        <img class="logo-ccm painel-logo" src="logo.png" alt="Logo do CCM">
-        <h3>CCM</h3>
-        <p class="painel-sub">Controle de aparelhos</p>
-        <div class="painel-usuario">
-            <span id="painel-nome">—</span>
-            <span id="painel-cargo" class="selo ok">—</span>
+    <div class="menu-backdrop" id="menu-backdrop"></div>
+
+    <nav id="menu-lateral" class="menu-lateral" aria-label="Menu principal">
+        <div class="menu-topo">
+            <div class="menu-logo"><img class="logo-ccm" src="logo.png" alt="CCM"></div>
+            <div class="menu-identidade">
+                <strong>CCM</strong>
+                <span>Controle de aparelhos</span>
+            </div>
         </div>
-    </aside>
+
+        <div class="menu-secao">NAVEGAÇÃO</div>
+        <button id="opcao1" class="btn-opcao" type="button"><span class="menu-icone">▣</span><span>Aparelhos</span></button>
+        <button id="opcao2" class="btn-opcao" type="button"><span class="menu-icone">⇄</span><span>Empréstimos</span></button>
+        <button id="opcao5" class="btn-opcao" type="button"><span class="menu-icone">▧</span><span>Reservas</span></button>
+        <button id="opcao6" class="btn-opcao" type="button"><span class="menu-icone">◷</span><span>Horários Fixos</span></button>
+        <button id="opcao3" class="btn-opcao" type="button"><span class="menu-icone">▤</span><span>Relatórios</span></button>
+        <button id="opcao7" class="btn-opcao" type="button" style="display:none"><span class="menu-icone">⊞</span><span>Professores e Turmas</span></button>
+        <button id="opcao4" class="btn-opcao" type="button" style="display:none"><span class="menu-icone">♙</span><span>Usuários</span></button>
+
+        <div class="menu-rodape">
+            <div class="menu-secao">CONTA</div>
+            <div class="menu-usuario">
+                <img class="logo-ccm" src="logo.png" alt="">
+                <div class="menu-usuario-info">
+                    <strong id="painel-nome">—</strong>
+                    <span id="painel-cargo" class="selo ok">—</span>
+                </div>
+            </div>
+            <button id="btn-logout" class="btn-logout" type="button">Sair para tela inicial</button>
+        </div>
+    </nav>
 
     <div id="janela" class="janela">
         <div class="janela-topo">
             <h2 id="janela-titulo"></h2>
             <div class="janela-botoes">
-                <button id="expandirJanela" class="btn-janela" aria-label="Expandir" title="Expandir">
-                    <svg class="icone-expandir" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-                    <svg class="icone-reduzir" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
-                </button>
                 <button id="fecharJanela" class="btn-janela" aria-label="Fechar" title="Fechar">
                     <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
                 </button>
